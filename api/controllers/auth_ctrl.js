@@ -185,33 +185,47 @@ function getuserProfile(req,res){
 }
 
 
-function uploadImage(req,res){
+ function uploadImage(req,res){
     co(function*(){
         var timestamp = Number(new Date());
         // var form = new formidable.IncomingForm();
         var file = req.swagger.params.file.value;
         var userId = req.user._id;
         var splitFile = file.originalname.split('.');
-        var filename = +timestamp + '_' + common.randomToken(6) + '.'  + ((splitFile.length > 0) ? splitFile[splitFile.length - 1] : file.originalname);
+        var filename = +timestamp + '_' + common.randomToken(6) + '-640px-640px.'  + ((splitFile.length > 0) ? splitFile[splitFile.length - 1] : file.originalname);
         var imagePath = "./public/images/" + filename;
-         let imageUploaded = yield utility.fileUpload(imagePath, file.buffer);
-        let userData = yield User.findById(userId);
-        if (userData) {
-            let oldFileName = userData.profile_image;
-            userData.profile_image = "/images/" + filename;
-            let userUpdated = yield userData.save();
-            if (oldFileName) {
-                var fs = require('fs');
-                var filePath =  oldFileName;
-                fs.unlinkSync(filePath);
-            }
-            return res.json({ code: 200, message: 'User profile pic updated successfully.', data: { profile_image: "assets/uploads/" + filename}});
-        } else {
-            return res.json({ code: 402, message: 'User not found' , data:{}});
-        }
-    }).catch(function(err){
-        console.log(err);
-        res.json({ code: 402, 'message': 'Request could not be processed. Please try again.' , data: {}});        
-    });
+     
+        var large_filename = +timestamp + '_' + common.randomToken(6) + '-640px-640px.'+ '.'  + ((splitFile.length > 0) ? splitFile[splitFile.length - 1] : file.originalname);
+        var medium_filename = +timestamp + '_' + common.randomToken(6) + '-320px-320px.'+ '.'  + ((splitFile.length > 0) ? splitFile[splitFile.length - 1] : file.originalname);
+        var small_filename = +timestamp + '_' + common.randomToken(6) + '-240px-240px.'+ '.'  + ((splitFile.length > 0) ? splitFile[splitFile.length - 1] : file.originalname);
+        let thumbnail = [
+            "./public/images/" +large_filename,
+            "./public/images/" +medium_filename,
+            "./public/images/" + small_filename
+        ];
+        
+        utility.fileUpload(thumbnail, file.buffer).then(resp=>{
+            console.log("0000",resp);
+        })
+       
+        
+    //     let userData = yield User.findById(userId);
+    //     if (userData) {
+    //         let oldFileName = userData.profile_image;
+    //         userData.profile_image = "/images/" + filename;
+    //         let userUpdated = yield userData.save();
+    //         if (oldFileName) {
+    //             var fs = require('fs');
+    //             var filePath =  oldFileName;
+    //             fs.unlinkSync(filePath);
+    //         }
+    //         return res.json({ code: 200, message: 'User profile pic updated successfully.', data: { profile_image: "assets/uploads/" + filename}});
+    //     } else {
+    //         return res.json({ code: 402, message: 'User not found' , data:{}});
+    //     }
+    // }).catch(function(err){
+    //     console.log(err);
+    //     res.json({ code: 402, 'message': 'Request could not be processed. Please try again.' , data: {}});        
+     });
 }
 

@@ -1,0 +1,9 @@
+ var large_filename = +timestamp + '_' + common.randomToken(6) + '_large_640*640'+ '.'  + ((splitFile.length > 0) ? splitFile[splitFile.length - 1] : file.originalname);
+        var medium_filename = +timestamp + '_' + common.randomToken(6) + '_medium_320*320'+ '.'  + ((splitFile.length > 0) ? splitFile[splitFile.length - 1] : file.originalname);
+        var small_filename = +timestamp + '_' + common.randomToken(6) + '_small_50*50'+ '.'  + ((splitFile.length > 0) ? splitFile[splitFile.length - 1] : file.originalname);
+        let thumbnail = [
+            large_filename,
+            medium_filename,
+            small_filename
+        ];
+        

@@ -18,6 +18,7 @@ var shortid = require('shortid');
 var User = require('../models/users');
 var co = require("co");
 var jwt = require('jsonwebtoken');
+var im = require('imagemagick');
 
 var utility = {};
 
@@ -386,17 +387,16 @@ utility.sendNotificationToWishlistISBN = (bookTitle, isbn1, isbn2, sendData) => 
         });
 }
 
-utility.fileUpload = function(imagePath, buffer) {
-    var paths = path.resolve(imagePath);
-    return new Promise(function(resolve, reject) {
-        fs.writeFile(paths, buffer, function(err) {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
+utility.fileUpload = async function(arrPath, buffer) {
+    arrPath.map((imagePath,index)=>{
+        var paths = path.resolve(imagePath);    
+            fs.writeFile(paths, buffer, function(err) {
+                if(arrPath == index+1){
+                    return true;
+                }
+            });            
     });
+    
 }
 
 

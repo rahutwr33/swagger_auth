@@ -16,7 +16,7 @@ var UserSchema = new mongoose.Schema({
     parent_id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     stripe_customer_id: { type: String},//Stripe customer id
     is_stripe_acc_verified: { type: Boolean, default: false},//Quick bloq id
-    profile_image: { type: String},
+    profile_image: [],
     stripe_status: { type: String},
     bill_amount:{type: String},
     initial_user :{type: String}, // 1=> Inital we allocate 5 users per registrat
