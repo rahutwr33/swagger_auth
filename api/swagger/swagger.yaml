@@ -1,0 +1,220 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:3000
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /api/userRegister:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: auth_ctrl
+    post:
+      tags: ['Auth Module']
+      description: User Sign Up
+      summary:  User Sign Up
+      # used as the method name of the controller
+      operationId: userRegister
+      parameters:
+        - name: body
+          in: body
+          description:  User Sign Up
+          schema:
+           $ref: '#/definitions/userRegister'
+          required: true        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/appResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse" 
+  /api/userLogin:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: auth_ctrl
+    post:
+      tags: ['Auth Module']
+      description: User Sign In
+      summary: User Sign In
+      # used as the method name of the controller
+      operationId: userLogin
+      parameters:
+        - name: body
+          in: body
+          description: User Sign In
+          schema:
+           $ref: '#/definitions/userLogin'
+          required: true        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/appResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"   
+  /api/forgotPassword:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: auth_ctrl
+    post:
+      tags: ['Auth Module']
+      description: Forgot Password
+      summary: Forgot Password
+      # used as the method name of the controller
+      operationId: forgotPassword
+      parameters:
+        - name: body
+          in: body
+          description: Forgot Password
+          schema:
+           $ref: '#/definitions/forgotPassword'
+          required: true        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/appResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse" 
+  /api/profile:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: auth_ctrl
+    get:
+      tags: ['Auth Module']
+      description: Get user profile 
+      summary:  Get user profile 
+      # used as the method name of the controller
+      operationId: getuserProfile      
+      parameters:
+        - name: Authorization
+          in: header
+          description: Authorization
+          required: true
+          type: string                         
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/userProfile"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/uploadImage:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: auth_ctrl
+    post:
+      tags: ['Auth Module']
+      description: upload image
+      summary: upload image
+      # used as the method name of the controller
+      operationId: uploadImage
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: Authorization
+          in: header
+          description: Authorization
+          required: true
+          type: string 
+        - in: formData
+          name: file
+          description: Update User Profile Pic
+          type: file
+          required: true 
+          
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/appResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse" 
+
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  userRegister:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string                 
+            
+  userLogin:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string  
+  
+  forgotPassword:
+    type: object
+    properties:
+      email:
+        type: string 
+         
+  userProfile:
+    type: object                 
+                      
+  HelloWorldResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  appResponse:
+    required:
+      - code
+    properties:
+      code:
+        type: number
+      status:
+        type: string    
+      data:
+        type: object    
+      message:
+        type: string        
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
